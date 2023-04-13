@@ -52,10 +52,10 @@ def login_post():
     return redirect(url_for('message', name=username))
     # return render_template("home.html", name=username)
 
-@app.route("/message")
+@app.route("/message", methods=["GET"])
 def message():
     name = request.args.get('name')
-    return render_template("home.html")
+    return render_template("home.html", name=name)
 
 
 if __name__ == "__main__":

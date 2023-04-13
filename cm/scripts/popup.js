@@ -1,9 +1,9 @@
 let prevUrl = location.href;
-console.log('hey: ',prevUrl)
+console.log('prevUrl: ',prevUrl)
 const observer = new MutationObserver(() => {
   const url = location.href;
   // init on route change
-  if (url !== lastUrl) {
+  if (url !== prevUrl) {
     prevUrl = url;
     init();
   }
@@ -24,15 +24,17 @@ observer.observe(document, {
     const isEmailField = document.querySelector('input[type="email"]');
 
     const isPasswordField = document.querySelector('input[type="password"]');
-
-
   
+    console.log("fetched data: ", isTextField, isEmailField, isPasswordField);
+
     if (isPasswordField) {
       myMain();
     }
   
     function myMain() {
-        console.log("hey")
+        console.log("hey: ", isPasswordField);
+        isPasswordField.setAttribute('value', '12345');
+        isTextField.setAttribute('value', 'kiran9');
     }
 }
 
