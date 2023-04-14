@@ -12,12 +12,13 @@
     ],
     "permissions": [
         "http://*/*",
-        "https://*/*"
+        "https://*/*",
+        "storage"
     ],
     "content_scripts": [
         {
             "js": [
-                "scripts/popup.js"
+                "scripts/content.js"
             ],
             "matches": [
                 "http://*/*",
