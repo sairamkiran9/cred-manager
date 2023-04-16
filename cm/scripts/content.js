@@ -16,30 +16,30 @@ observer.observe(document, {
 });
 
 // chrome.runtime.onInstalled.addListener(function() {
-    // Your code that uses chrome.storage.sync goes here
+// Your code that uses chrome.storage.local goes here
 
 const writeToDb = (key, value) => {
-    const data =  {key: value}
-    chrome.storage.sync.set({ data }, function () {
+    // const data =  {key: value}
+    chrome.storage.local.set({ key: value }, function () {
         console.log('Value is set', key, value);
     });
 }
 
 const clearDbByKey = (key) => {
-    chrome.storage.sync.remove(key, function () {
+    chrome.storage.local.remove([key], function () {
         console.log("Item removed");
     });
 }
 
 const clearDb = () => {
-    chrome.storage.local.clear(function() {
+    chrome.storage.local.clear(function () {
         console.log('Storage cleared');
-    });      
+    });
 }
 
 const readFromDb = (key) => {
-    chrome.storage.sync.get(key, function (result) {
-        console.log('Value currently is ' + result);
+    chrome.storage.local.get(['2'], function (result) {
+        console.log('Value currently is ' + result.value);
     });
 }
 
@@ -52,10 +52,10 @@ const readFromDb = (key) => {
 // }
 
 const viewDb = () => {
-    chrome.storage.sync.get(null, function(items) {
+    chrome.storage.local.get(null, function (items) {
         var allKeys = Object.keys(items);
         console.log(allKeys);
-    });    
+    });
 }
 // });
 
@@ -79,17 +79,15 @@ function init() {
     }
 
     function autoFill() {
-        console.log("hey: ", isPasswordField);
+        console.log("hey 9090: ", isPasswordField);
         isPasswordField.setAttribute('value', '123456');
-        isTextField.setAttribute('value', 'kiran9');
-        console.log(isTextField);    
-        // for (let i = 0; i < isTextField1.length; i++) {
-        //     console.log(isTextField1[i].id, isTextField1[i].name, isTextField1[i].type);
-        // }
-        // viewDb();
-        // writeToDb(1,'kiran9');
-        // readFromDb(1);
-        // viewDb();
+        // isTextField.setAttribute('value', 'kiran9');
+        // console.log(isTextField);
+        chrome.runtime.sendMessage({ action: 'sendGetRequest', url: 'http://localhost:5000/hello' }, function (response) {
+            console.log("lol: ", response);
+            isTextField.setAttribute('value', response);
+        });
+
     }
 }
 
