@@ -1,3 +1,5 @@
-creds.csv
+creds*
 chrome*
-cm-chrome*
+cm-*
+server/
+flask_app/__*

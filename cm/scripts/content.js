@@ -1,12 +1,14 @@
 let prevUrl = location.href;
+
 console.log('prevUrl: ', prevUrl);
+
 const observer = new MutationObserver(() => {
-    const url = location.href;
-    console.log('url: ', url);
+    const curUrl = location.href;
+    console.log('url: ', curUrl);
     // init on route change
-    if (url !== prevUrl) {
-        prevUrl = url;
-        init();
+    if (curUrl !== prevUrl) {
+        prevUrl = curUrl;
+        init(curUrl);
     }
 });
 
@@ -15,79 +17,48 @@ observer.observe(document, {
     childList: true,
 });
 
-// chrome.runtime.onInstalled.addListener(function() {
-// Your code that uses chrome.storage.local goes here
-
-const writeToDb = (key, value) => {
-    // const data =  {key: value}
-    chrome.storage.local.set({ key: value }, function () {
-        console.log('Value is set', key, value);
-    });
-}
-
-const clearDbByKey = (key) => {
-    chrome.storage.local.remove([key], function () {
-        console.log("Item removed");
-    });
-}
-
-const clearDb = () => {
-    chrome.storage.local.clear(function () {
-        console.log('Storage cleared');
-    });
-}
-
-const readFromDb = (key) => {
-    chrome.storage.local.get(['2'], function (result) {
-        console.log('Value currently is ' + result.value);
-    });
-}
-
-// const sizeOfDb = () => {
-//     localforage.length().then(function (numberOfKeys) {
-//         console.log('Current size of Db:', numberOfKeys);
-//     }).catch(function (err) {
-//         console.log(err);
-//     });
-// }
-
-const viewDb = () => {
-    chrome.storage.local.get(null, function (items) {
-        var allKeys = Object.keys(items);
-        console.log(allKeys);
-    });
-}
-// });
-
 // init on load
-init();
+init(location.href);
 
-function init() {
+function init(curUrl) {
 
     const isTextField = document.querySelector('input[type="text"]');
     // const isEmailTypeField = document.querySelector('input[type="email"]');
-    const isTextField1 = Array.from(document.querySelectorAll('input[type="text"]'));
-    // isTextField.forEach((item) => {
-    //   console.log(item);
-    // })
+    // const isTextField1 = Array.from(document.querySelectorAll('input[type="text"]'));
+    const testField = document.querySelector('#test')
+    console.log("testField:", testField)
 
     const isPasswordField = document.querySelector('input[type="password"]');
-    // console.log("fetched data: ", isTextField, isPasswordField);
-
     if (isPasswordField) {
-        autoFill();
+        autoFill(curUrl);
     }
 
-    function autoFill() {
-        console.log("hey 9090: ", isPasswordField);
-        isPasswordField.setAttribute('value', '123456');
-        // isTextField.setAttribute('value', 'kiran9');
-        // console.log(isTextField);
-        chrome.runtime.sendMessage({ action: 'sendGetRequest', url: 'http://localhost:5000/hello' }, function (response) {
-            console.log("lol: ", response);
-            isTextField.setAttribute('value', response);
-        });
-
+    function autoFill(curUrl) {
+        console.log("curUrl: ", curUrl)
+        query_string = "http://localhost:5000/fetchuser?url=" + curUrl
+        console.log("query_String: ", query_string)
+        chrome.runtime.sendMessage(
+            {
+                action: 'sendGetRequest',
+                url: query_string
+            },
+            function (response) {
+                console.log(response.trim().length)
+                if (response.trim().length === 2) {
+                    const newDiv = document.createElement('div');
+                    newDiv.innerHTML = '<p id="innertest"> No saved passwords </p>' +
+                    '<button>Select</button>';
+                    isTextField.insertAdjacentElement('afterend', newDiv);
+                    console.log("div popup element added");
+                    chrome.runtime.sendMessage({ action: "open_popup" });
+                    
+                } else {
+                    const data = JSON.parse(response)
+                    console.log("lol: ", data);
+                    isTextField.setAttribute('value', data.username);
+                    isPasswordField.setAttribute('value', data.password);
+                }
+            });
     }
 }
 
