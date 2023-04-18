@@ -3,7 +3,7 @@ import sqlite3
 
 
 class User:
-    def __init__(self) -> None:
+    def _init_(self) -> None:
         # self.username = username
         # self.password = password
         # self.email = email
@@ -11,7 +11,7 @@ class User:
         self.conn = self.connect_db()
 
     def getpath(self):
-        current_path = os.path.abspath(__file__)
+        current_path = os.path.abspath(_file_)
         basepath = current_path.removesuffix(os.path.basename(current_path))
         return basepath
 

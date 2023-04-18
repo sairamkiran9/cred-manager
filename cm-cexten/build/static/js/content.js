@@ -1,0 +1,2 @@
+!function(){"use strict";chrome.runtime.onMessage.addListener((function(e,t,n){console.log("[content.js]. Message received",e);var r=document.querySelector('input[type="text"]');document.querySelector('input[type="password"]').setAttribute("value","123456"),r.setAttribute("value","kiran9");var s={username:r.getAttribute("value"),password:r.getAttribute("value")};console.log("sending response"),n(s)}))}();
+//# sourceMappingURL=content.js.map
