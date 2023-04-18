@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from user import User
 
-app = Flask(_name_)
+app = Flask(__name__)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -55,7 +55,7 @@ def auto_fill():
         }
     return response
 
-if _name_ == "_main_":
+if __name__ == "__main__":
     user = User()
     user.create_table()
     # print(user.get_alldata("users"))

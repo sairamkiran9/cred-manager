@@ -26,9 +26,6 @@
             ]
         }
     ],
-    "storage": {
-        "managed_schema": "managed_schema.json"
-    },
     "background": {
         "service_worker": "scripts/background.js"
     }
