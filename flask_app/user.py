@@ -3,7 +3,7 @@ import sqlite3
 
 
 class User:
-    def __init__(self) -> None:
+    def _init_(self) -> None:
         # self.username = username
         # self.password = password
         # self.email = email
@@ -11,7 +11,7 @@ class User:
         self.conn = self.connect_db()
 
     def getpath(self):
-        current_path = os.path.abspath(__file__)
+        current_path = os.path.abspath(_file_)
         basepath = current_path.removesuffix(os.path.basename(current_path))
         return basepath
 
@@ -27,9 +27,16 @@ class User:
         cur = self.conn.cursor()
         cur.execute(query)
 
-    def get_data(self, query):
-        cur = self.conn.cursor()
-        res = cur.execute(query)
+    def get_alldata(self, table):
+        con = sqlite3.connect("userDetails.db")
+        cur = con.cursor()
+        res = cur.execute(f"SELECT * FROM {table}")
+        return res.fetchall()
+
+    def get_data(self, table, key, value):
+        con = sqlite3.connect("userDetails.db")
+        cur = con.cursor()
+        res = cur.execute(f"SELECT * FROM {table} WHERE {key} = ?", (value,))
         return res.fetchall()
 
     def put_data(self, url, email, username, password):
@@ -47,13 +54,17 @@ class User:
         cur.execute(f"DELETE FROM users WHERE url = ?", (query,))
         self.conn.commit()
 
+def main():
+    user = User()
+    user.create_table()
+    print(user.get_alldata("users"))
+    user.put_data("url1", "kiran@gmail.com", "kiran9", "pop")
+    user.put_data("url2", "sm@gmail.com", "kdasiran9", "podap")
+    user.put_data("url3", "kiran@gmail.com", "kiran9", "pop")
+    user.put_data("http://localhost:5000/", "kiran@gmail.com", "kiran9", "pop")
+    user.put_data("http://localhost:5000/register", "kiran@gmail.com", "Sahithi", "hope9")
+    user.remove_data("daas")
+    print("Final data")
+    print("Data: ", user.get_alldata("users"))
 
-# user = User()
-# user.create_table()
-# print(user.get_data("select * from users"))
-# user.put_data("asasas", "kiran@gmail.com", "kiran9", "pop")
-# user.put_data("daas", "sm@gmail.com", "kdasiran9", "podap")
-# user.put_data("asasas", "kiran@gmail.com", "kiran9", "pop")
-# print(user.get_data("select * from users"))
-# user.remove_data("daas")
-# print(user.get_data("select * from users"))
+# main()

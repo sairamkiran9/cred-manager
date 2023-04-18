@@ -1,8 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from user import User
 
-app = Flask(__name__)
-
+app = Flask(_name_)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -42,8 +41,22 @@ def hello():
     return "srivennala"
 
 
-if __name__ == "__main__":
+@app.route("/fetchuser")
+def auto_fill():
+    response = {}
+    url = request.args.get('url')
+    print("url: ", url)
+    data = user.get_data(table = "users", key = "url", value = url)
+    print("fetched data: ",data)
+    if data:
+        response = {
+            "username" : data[0][3],
+            "password" : data[0][4]
+        }
+    return response
+
+if _name_ == "_main_":
     user = User()
     user.create_table()
-    print(user.get_data("select * from users"))
+    # print(user.get_alldata("users"))
     app.run(debug=True)
