@@ -55,6 +55,26 @@ def auto_fill():
         }
     return response
 
+@app.route("/saveuser")
+def save_details():
+    response = {}
+    data = request.args.get('data')
+    print("data: ", data)
+    # data = user.get_data(table = "users", key = "url", value = url)
+    print("fetched data: ",data)
+    if data:
+        response = {
+            "username" : data[0][3],
+            "password" : data[0][4]
+        }
+    return "Data saved sucessfully"
+
+@app.route("/viewcreds")
+def view_data():
+    data = user.get_alldata("users")
+    print("############",data)
+    return render_template('table.html', data=data)
+
 if __name__ == "__main__":
     user = User()
     user.create_table()
