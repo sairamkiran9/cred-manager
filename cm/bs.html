@@ -1,104 +1,19 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
-    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <!-- 
-    <title>Hello, world!</title> -->
+    <meta charset="UTF-8">
+    <title>CredManager</title>
+    <script type="module" src="./scripts/content.js"></script>
 </head>
 
 <body>
-  <!-- <h3>Save password?</h3> -->
-  <div class="card">
-    <div class="card-header">
-      Save passowrd?
-    </div>
-    <p id="test"></p>
-    <a href="http://localhost:5000/viewcreds">view</a>
-    <form id="login-form-extension" method="POST">
-      <label for="username">Username:</label>
-      <input type="text" id="username-extension" name="username" value="asd"><br><br>
-      <label for="password">Password:</label>
-      <input type="password" id="password-extension" name="password" value="=das"><br><br>
-      <input type="submit" id="login-extension" value="Login">
-    </form>
-    <button id="my-button-yes">Click me yes</button>
-
-
-  </div>
-
-  <!-- Place your code here -->
-
-  <!-- Optional JavaScript -->
-  <!-- <script src="scripts/content.js"></script> -->
-  <script>
-    console.log("in bs.html js");
-    // const newDiv = document.createElement('my-div');
-    // newDiv.innerHTML = "<p>hii</p>";
-    // document.getElementById("my-button").addEventListener("click", function () {
-    //   document.getElementById("my-button").innerHTML = "Button clicked!";
-    // });
-
-    var myButton = document.getElementById('my-button-yes');
-    var username = document.getElementById('username_extension');
-    var password = document.getElementById('password-extension');
-
-    username.addEventListener('input', () => {
-      console.log('Text entered:', username.value);
-    });
-    password.addEventListener('input', () => {
-      console.log('Text entered:', password.value);
-    });
-    console.log(username.value, password.value);
-    if (myButton != null) {
-      myButton.addEventListener('click', function () {
-        data = {
-          "username": username.value,
-          "password": password.value
-        }
-        const saveQueryString = "http://localhost:5000/saveuser?data=" + JSON.stringify(data);
-        console.log(saveQueryString)
-        chrome.runtime.sendMessage(
-          {
-            action: 'saveCreds',
-            url: saveQueryString
-          },
-          function (response) {
-            console.log("json response: ", JSON.parse(response))
-          });
-      });
-    }
-
-
-
-    const loginForm = document.querySelector('#login-form-extension');
-    loginForm.addEventListener('submit', (event) => {
-      event.preventDefault(); // prevent the default form submission behavior
-      // Get the values from the form fields
-      const username = document.querySelector('#username-extension').value;
-      const password = document.querySelector('#password-extension').value;
-      // Perform validation, e.g. check if the username and password match a database record
-      if (username === 'asd' || password === 'password') {
-        // Redirect to the homepage
-        window.location.href = 'http://localhost:5000/viewcreds';
-      } else {
-        alert('Invalid username or password');
-      }
-    });
-  </script>
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
-    integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
-    integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"></script> -->
+    <h1>CredManager</h1>
+    <p> Some description to make sense about the extension </p>
+    <a href="http://localhost:5000/savecredspage" target="_blank" id="savecreds">saveCreds</a>
+    <a href="http://localhost:5000/" id="generatepass">generatepass</a>
+    <a href="http://localhost:5000/" id="dashboard">dashboard</a>
+    <a href="http://localhost:5000/viewcreds" target="_blank" id="view_creds">view_creds</a>
 </body>
 
 </html>

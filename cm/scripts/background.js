@@ -2,15 +2,7 @@ console.log("Background script loaded.");
 
 chrome.runtime.onInstalled.addListener(({ reason }) => {
     console.log("Extension installed.", reason);
-    // if (reason === 'update') {
-    // chrome.tabs.create({
-    // active: true,
-    //   url: "popup.html"
-    // });
-    //   }
 });
-
-// chrome.tabs.onActivated.addListener(getCurrentTab);
 
 async function getCurrentTab() {
     let queryOptions = { active: true, lastFocusedWindow: true };
@@ -23,24 +15,14 @@ async function getCurrentTab() {
     return null;
 }
 
-// chrome.tabs.onCreated.addListener(
-//     (tab) => {
-//         console.log("onCreated", tab)
+
+// chrome.tabs.onUpdated.addListener(
+//     function (tabId, changeInfo, tab) {
+//         console.log("Updated tab ID:", tabId);
+//         console.log("Updated tab URL:", tab.url);
+//         console.log("status info", changeInfo.status);          
 //     }
-// )
-
-chrome.tabs.onUpdated.addListener(
-    function (tabId, changeInfo, tab) {
-        console.log("Updated tab ID:", tabId);
-        console.log("Updated tab URL:", tab.url);
-        console.log("status info", changeInfo.status);
-
-        chrome.tabs.sendMessage(tabId, { action: "get_content" }, function(response) {
-            console.log(response.content);
-          });
-          
-    }
-);
+// );
 
 // function check_button() {
 //     var myButton = document.getElementById('myButton-yes');
@@ -93,9 +75,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         console.log("save creds");
         return true;
     }
-    else if (request.action === "get_content") {
-        sendResponse({ content: document.documentElement.innerHTML });
-      }
     else {
         console.log("Message received:", request);
         sendResponse({ message: "Message received." });
