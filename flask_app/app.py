@@ -1,9 +1,11 @@
-import json
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sys
+import json
 sys.path.append('./utils')  # Replace with the actual path to myfolder
-from resource import generate
 from user import User
+from temp import generate
+
+
 
 app = Flask(__name__)
 
@@ -91,7 +93,7 @@ def view_data():
 def generate_password():
     data = generate()
     print("generated password: ", data)
-    return data
+    return f"{data}"
 
 
 if __name__ == "__main__":

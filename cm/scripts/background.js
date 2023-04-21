@@ -1,13 +1,19 @@
 console.log("Background script loaded.");
 
-chrome.runtime.onInstalled.addListener(() => {
-    console.log("Extension installed.");
+chrome.runtime.onInstalled.addListener(({ reason }) => {
+    console.log("Extension installed.", reason);
 });
 
-// chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-//   console.log("Message received:", request);
-//   sendResponse({ message: "Message received." });
-// });
+async function getCurrentTab() {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    // `tab` will either be a `tabs.Tab` instance or `undefined`.
+    let [tab] = await chrome.tabs.query(queryOptions);
+    if (tab) {
+        console.log("activated tabs: ", tab.url);
+        return tab;
+    }
+    return null;
+}
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'sendGetRequest') {
@@ -15,21 +21,31 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             .then(response => response.text())
             .then(data => sendResponse(data))
             .catch(error => console.error(error));
-        return true; // Return true to indicate that sendResponse will be called asynchronously
+        return true;
     }
-    else if (request.action === "open_popup") {
+    else if (request.action === "save_creds_popup") {
         chrome.windows.create({
-            url: chrome.extension.getURL("popup.html"),
+            url: chrome.runtime.getURL("bs.html"),
             type: "popup",
             focused: true,
-            top: 100,
-            left: 100,
+            top: 150,
+            left: 150,
             width: 400,
             height: 400
         });
+        console.log("save creds popup window created");
+    }
+    else if (request.action === "saveCreds") {
+        fetch(request.url)
+            .then(response => response.text())
+            .then(data => sendResponse(data))
+            .catch(error => console.error(error));
+        console.log("save creds");
+        return true;
     }
     else {
         console.log("Message received:", request);
         sendResponse({ message: "Message received." });
     }
 });
+

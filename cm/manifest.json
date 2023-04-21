@@ -13,7 +13,12 @@
     "permissions": [
         "http://*/*",
         "https://*/*",
-        "storage"
+        "storage",
+        "activeTab",
+        "webNavigation",
+        "webRequest",
+        "scripting",
+        "tabs"
     ],
     "content_scripts": [
         {
@@ -28,5 +33,16 @@
     ],
     "background": {
         "service_worker": "scripts/background.js"
-    }
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "popup.html",
+                "bs.html"
+            ],
+            "matches": [
+                "*://*/*"
+            ]
+        }
+    ]
 }

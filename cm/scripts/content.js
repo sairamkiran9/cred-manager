@@ -29,30 +29,36 @@ function init(curUrl) {
     console.log("testField:", testField)
 
     const isPasswordField = document.querySelector('input[type="password"]');
+
     if (isPasswordField) {
         autoFill(curUrl);
     }
 
     function autoFill(curUrl) {
         console.log("curUrl: ", curUrl)
-        query_string = "http://localhost:5000/fetchuser?url=" + curUrl
-        console.log("query_String: ", query_string)
+        getQueryString = "http://localhost:5000/fetchuser?url=" + curUrl
+        console.log("query_String: ", getQueryString)
         chrome.runtime.sendMessage(
             {
                 action: 'sendGetRequest',
-                url: query_string
+                url: getQueryString
             },
             function (response) {
-                console.log(response.trim().length)
+                console.log("sendGetRequest response: ", response)
                 if (response.trim().length === 2) {
-                    const newDiv = document.createElement('div');
-                    newDiv.innerHTML = '<p id="innertest"> No saved passwords </p>' +
-                    '<button>Select</button>';
-                    isTextField.insertAdjacentElement('afterend', newDiv);
-                    console.log("div popup element added");
-                    chrome.runtime.sendMessage({ action: "open_popup" });
-                    
-                } else {
+
+                    // fetch(chrome.runtime.getURL('bs.html'))
+                    //     .then(response => response.text())
+                    //     .then(data => {
+                    //         const newDiv = document.createElement('div');
+                    //         newDiv.innerHTML = data;
+                    //         isTextField.insertAdjacentElement('afterend', newDiv);
+                    //         console.log("div popup element added");
+                    //     });
+                    console.log("In if for unsaved creds")
+                    chrome.runtime.sendMessage({ action: "save_creds_popup" });
+                }
+                else {
                     const data = JSON.parse(response)
                     console.log("lol: ", data);
                     isTextField.setAttribute('value', data.username);
@@ -61,4 +67,3 @@ function init(curUrl) {
             });
     }
 }
-

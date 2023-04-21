@@ -36,6 +36,7 @@ class User:
         cur = con.cursor()
         res = cur.execute(f"SELECT * FROM {table} WHERE {key} = ?", (value,))
         data = res.fetchall()
+        print(data)
         data[0][4] = self.crypto.decrypt_data(data[0][4])
         return data
 
@@ -75,5 +76,6 @@ def main():
     user.remove_data("daas")
     print("Final data")
     print("Data: ", user.get_alldata("users"))
+    print("data: ", user.get_data("url", "url1"))
 
 # main()
