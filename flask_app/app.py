@@ -1,7 +1,12 @@
+import json
 from flask import Flask, render_template, request, redirect, url_for, jsonify
+import sys
+sys.path.append('./utils')  # Replace with the actual path to myfolder
+from resource import generate
 from user import User
 
 app = Flask(__name__)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -40,20 +45,54 @@ def hello():
     print(request.args.get('body'))
     return "srivennala"
 
+# Cred manager methods
+
 
 @app.route("/fetchuser")
 def auto_fill():
     response = {}
     url = request.args.get('url')
     print("url: ", url)
-    data = user.get_data(table = "users", key = "url", value = url)
-    print("fetched data: ",data)
+    data = user.get_data(table="users", key="url", value=url)
+    print("fetched data: ", data)
     if data:
         response = {
-            "username" : data[0][3],
-            "password" : data[0][4]
+            "username": data[0][3],
+            "password": data[0][4]
         }
     return response
+
+
+@app.route("/savecreds")
+def save_details():
+    response = {}
+    data = request.get_json()
+    print("data: ", data)
+    if user.put_data(username=data["username"], password=data["password"]):
+        fetch_data = user.get_data(
+            table="users", key="username", value=data["username"])
+        print("fetched data: ", fetch_data)
+        return "Data saved sucessfully"
+    return "Data not saved sucessfully"
+
+
+@app.route("/savecredspage")
+def save_creds():
+    return render_template("save_passwords.html")
+
+
+@app.route("/viewcreds")
+def view_data():
+    data = user.get_alldata("users")
+    return render_template('table.html', data=data)
+
+
+@app.route("/generatepassword")
+def generate_password():
+    data = generate()
+    print("generated password: ", data)
+    return data
+
 
 if __name__ == "__main__":
     user = User()

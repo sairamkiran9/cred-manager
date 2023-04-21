@@ -3,3 +3,4 @@ chrome*
 cm-*
 server/
 flask_app/__*
+*.json
