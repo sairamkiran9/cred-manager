@@ -15,38 +15,6 @@ async function getCurrentTab() {
     return null;
 }
 
-
-// chrome.tabs.onUpdated.addListener(
-//     function (tabId, changeInfo, tab) {
-//         console.log("Updated tab ID:", tabId);
-//         console.log("Updated tab URL:", tab.url);
-//         console.log("status info", changeInfo.status);          
-//     }
-// );
-
-// function check_button() {
-//     var myButton = document.getElementById('myButton-yes');
-//     console.log("button:", myButton);
-
-//     if (myButton) {
-//         myButton.addEventListener('click', function () {
-//             data = {
-//                 "username": "mp",
-//                 "password": "9090"
-//             }
-//             const saveQueryString = "http://localhost:5000/saveuser?data=" + JSON.stringify(data);
-//             chrome.runtime.sendMessage(
-//                 {
-//                     action: 'saveCreds',
-//                     url: saveQueryString
-//                 },
-//                 function (response) {
-//                     console.log("json response: ", JSON.parse(response))
-//                 });
-//         });
-//     }
-// }
-
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'sendGetRequest') {
         fetch(request.url)
@@ -62,8 +30,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             focused: true,
             top: 150,
             left: 150,
-            width: 200,
-            height: 200
+            width: 400,
+            height: 400
         });
         console.log("save creds popup window created");
     }

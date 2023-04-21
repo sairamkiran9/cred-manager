@@ -1,6 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
-from user import User
+import sys
 import json
+sys.path.append('./utils')  # Replace with the actual path to myfolder
+from user import User
+from temp import generate
+
+
 
 app = Flask(__name__)
 
@@ -63,22 +68,32 @@ def auto_fill():
 @app.route("/savecreds")
 def save_details():
     response = {}
-    data = request.get_json( )
+    data = request.get_json()
     print("data: ", data)
     if user.put_data(username=data["username"], password=data["password"]):
-        fetch_data = user.get_data(table="users", key="username", value=data["username"])
+        fetch_data = user.get_data(
+            table="users", key="username", value=data["username"])
         print("fetched data: ", fetch_data)
         return "Data saved sucessfully"
     return "Data not saved sucessfully"
+
 
 @app.route("/savecredspage")
 def save_creds():
     return render_template("save_passwords.html")
 
+
 @app.route("/viewcreds")
 def view_data():
     data = user.get_alldata("users")
     return render_template('table.html', data=data)
+
+
+@app.route("/generatepassword")
+def generate_password():
+    data = generate()
+    print("generated password: ", data)
+    return f"{data}"
 
 
 if __name__ == "__main__":
