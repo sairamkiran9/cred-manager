@@ -36,10 +36,13 @@ class User:
         cur = con.cursor()
         res = cur.execute(f"SELECT * FROM {table} WHERE {key} = ?", (value,))
         data = res.fetchall()
-        print(data)
-        data[0][4] = self.crypto.decrypt_data(data[0][4])
-        return data
-
+        if (data and len(data[0])>=1):
+            data = list(data[0])
+            print("list: ", data)
+            data[4] = self.crypto.decrypt_data(data[4])
+            return [data]
+        return []
+    
     def put_data(self, url=None, email=None, username=None, password=None):
         con = sqlite3.connect("userDetails.db")
         cur = con.cursor()

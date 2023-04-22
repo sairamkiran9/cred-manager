@@ -2,10 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sys
 import json
 sys.path.append('./utils')  # Replace with the actual path to myfolder
-from user import User
 from temp import generate
-
-
+from user import User
 
 app = Flask(__name__)
 
@@ -63,6 +61,14 @@ def auto_fill():
             "password": data[0][4]
         }
     return response
+
+
+@app.route("/popup")
+def popup():
+    response = {}
+    url = request.args.get('url')
+    print("url: ", url)
+    return render_template("bs.html")
 
 
 @app.route("/savecreds")

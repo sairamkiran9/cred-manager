@@ -1,4 +1,5 @@
-let prevUrl = location.href;
+let pre
+vUrl = location.href;
 
 console.log('prevUrl: ', prevUrl);
 
@@ -55,8 +56,9 @@ function init(curUrl) {
                     //         isTextField.insertAdjacentElement('afterend', newDiv);
                     //         console.log("div popup element added");
                     //     });
+                    popupQuery = "http://localhost:5000/popup?url=" + curUrl
                     console.log("In if for unsaved creds")
-                    chrome.runtime.sendMessage({ action: "save_creds_popup" });
+                    chrome.runtime.sendMessage({ action: "save_creds_popup" , url: popupQuery});
                 }
                 else {
                     const data = JSON.parse(response)

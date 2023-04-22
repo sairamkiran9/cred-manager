@@ -24,15 +24,20 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         return true;
     }
     else if (request.action === "save_creds_popup") {
-        chrome.windows.create({
-            url: chrome.runtime.getURL("bs.html"),
-            type: "popup",
-            focused: true,
-            top: 150,
-            left: 150,
-            width: 400,
-            height: 400
-        });
+        // chrome.windows.create({
+        //     url: chrome.runtime.getURL("bs.html"),
+        //     type: "popup",
+        //     focused: true,
+        //     top: 150,
+        //     left: 150,
+        //     width: 400,
+        //     height: 400
+        // });
+        fetch(request.url)
+            .then(response => response.text())
+            .then(data => sendResponse(data))
+            .catch(error => console.error(error));
+        return true;
         console.log("save creds popup window created");
     }
     else if (request.action === "saveCreds") {
@@ -48,4 +53,3 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         sendResponse({ message: "Message received." });
     }
 });
-
