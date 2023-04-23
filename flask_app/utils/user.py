@@ -20,7 +20,7 @@ class User:
     def create_table(self):
         con = sqlite3.connect("userDetails.db")
         query = """ CREATE TABLE IF NOT EXISTS users 
-        ( id INTEGER PRIMARY KEY, url, email, username, password ) 
+        ( id INTEGER PRIMARY KEY, url, username, password ) 
         """
         cur = con.cursor()
         cur.execute(query)
@@ -39,11 +39,11 @@ class User:
         if (data and len(data[0]) >= 1):
             data = list(data[0])
             print("list: ", data)
-            data[4] = self.crypto.decrypt_data(data[4])
+            data[3] = self.crypto.decrypt_data(data[3])
             return [data]
         return []
 
-    def put_data(self, url=None, email=None, username=None, password=None):
+    def put_data(self, url=None, username=None, password=None):
         con = sqlite3.connect("userDetails.db")
         cur = con.cursor()
         password = self.crypto.encrypt_data(password)
@@ -52,8 +52,8 @@ class User:
         print(cur.fetchone())
         if cur.fetchone() is None:
             cur.execute(
-                f"INSERT INTO users (url, email, username, password) VALUES (?, ?, ?, ?)",
-                (url, email, username, password)
+                f"INSERT INTO users (url, username, password) VALUES (?, ?, ?)",
+                (url, username, password)
             )
             con.commit()
             return True
@@ -72,12 +72,12 @@ def main():
     # print(user.conn)
     user.create_table()
     print(user.get_alldata("users"))
-    user.put_data("url1", "kiran@gmail.com", "kiran9", "pop")
-    user.put_data("url2", "sm@gmail.com", "kdasiran9", "podap")
-    user.put_data("url3", "kiran@gmail.com", "kiran9", "pop")
-    user.put_data("http://localhost:5000/", "kiran@gmail.com", "kiran9", "pop")
+    user.put_data("url1", "kiran9", "pop")
+    user.put_data("url2", "kdasiran9", "podap")
+    user.put_data("url3",  "kiran9", "pop")
+    user.put_data("http://localhost:5000/", "kiran9", "pop")
     user.put_data("http://localhost:5000/register",
-                  "kiran@gmail.com", "Sahithi", "hope9")
+                  "Sahithi", "hope9")
     user.remove_data("daas")
     print("Final data")
     print("Data: ", user.get_alldata("users"))
