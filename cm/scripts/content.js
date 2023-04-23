@@ -1,5 +1,4 @@
-let pre
-vUrl = location.href;
+let prevUrl = location.href;
 
 console.log('prevUrl: ', prevUrl);
 
@@ -18,17 +17,26 @@ observer.observe(document, {
     childList: true,
 });
 
+
+const isTest = document.getElementById('asdf');
+console.log("isTest: ", isTest)
+if(isTest!= null){
+    isTest.innerHTML = "prevUrl";
+}
+
+const urlHref = document.getElementById('savecreds');
+if(urlHref!=null){
+    const url = prevUrl.split('?url=');
+    urlHref.href = "http://localhost:3000/savecreds/" + "?url=" + url[url.length - 1];
+    isTest.innerHTML = url[url.length - 1];
+}
+
 // init on load
 init(location.href);
 
 function init(curUrl) {
 
     const isTextField = document.querySelector('input[type="text"]');
-    // const isEmailTypeField = document.querySelector('input[type="email"]');
-    // const isTextField1 = Array.from(document.querySelectorAll('input[type="text"]'));
-    const testField = document.querySelector('#test')
-    console.log("testField:", testField)
-
     const isPasswordField = document.querySelector('input[type="password"]');
 
     if (isPasswordField) {
@@ -49,6 +57,7 @@ function init(curUrl) {
                     console.log("sendGetRequest response: ", response)
                     if (response.trim().length === 2) {
                         popupQuery = "http://localhost:5000/popup?url=" + curUrl
+                        // popupQuery = "http://local"
                         console.log("In if for unsaved creds")
                         chrome.runtime.sendMessage({ action: "save_creds_popup", url: popupQuery });
                     }

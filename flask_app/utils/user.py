@@ -36,25 +36,28 @@ class User:
         cur = con.cursor()
         res = cur.execute(f"SELECT * FROM {table} WHERE {key} = ?", (value,))
         data = res.fetchall()
-        if (data and len(data[0])>=1):
+        if (data and len(data[0]) >= 1):
             data = list(data[0])
             print("list: ", data)
             data[4] = self.crypto.decrypt_data(data[4])
             return [data]
         return []
+
     def put_data(self, url=None, email=None, username=None, password=None):
         con = sqlite3.connect("userDetails.db")
         cur = con.cursor()
         password = self.crypto.encrypt_data(password)
         cur.execute(
             "SELECT * FROM users WHERE url=? AND username=?", (url, username))
+        print(cur.fetchone())
         if cur.fetchone() is None:
             cur.execute(
                 f"INSERT INTO users (url, email, username, password) VALUES (?, ?, ?, ?)",
                 (url, email, username, password)
             )
-        con.commit()
-        return True
+            con.commit()
+            return True
+        return False
 
     def remove_data(self, query):
         con = sqlite3.connect("userDetails.db")
@@ -78,6 +81,6 @@ def main():
     user.remove_data("daas")
     print("Final data")
     print("Data: ", user.get_alldata("users"))
-    print("data: ", user.get_data("users","url", "url1"))
+    print("data: ", user.get_data("users", "url", "url1"))
 
 # main()
