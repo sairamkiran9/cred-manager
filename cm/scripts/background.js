@@ -5,15 +5,17 @@ chrome.runtime.onInstalled.addListener(({ reason }) => {
 });
 
 async function getCurrentTab() {
-    let queryOptions = { active: true, lastFocusedWindow: true };
+    let queryOptions = { active: true, currentWindow: true };
     // `tab` will either be a `tabs.Tab` instance or `undefined`.
     let [tab] = await chrome.tabs.query(queryOptions);
     if (tab) {
-        console.log("activated tabs: ", tab.url);
+        console.log("activated tabs: ", tab);
         return tab;
     }
     return null;
 }
+
+chrome.tabs.onActivated.addListener(getCurrentTab);
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'sendGetRequest') {
@@ -33,7 +35,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             width: 400,
             height: 400
         });
-        console.log("save creds popup window created");
+        console.log("save creds popup window created", request.url);
+        fetch(request.url)
+            .then(response => response.text())
+            .then(data => sendResponse(data))
+            .catch(error => console.error(error));
+        return true;
     }
     else if (request.action === "saveCreds") {
         fetch(request.url)

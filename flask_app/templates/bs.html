@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>CredManager</title>
+    <!-- <script type="module" src="./scripts/content.js"></script> -->
+</head>
+
+<body>
+    <h1>CredManager</h1>
+    <p> Some description to make sense about the extension </p>
+    {% if url %}
+    <p> {{url}} haven't been saved to your Cred Vault.</p>
+    {% endif %}
+    <p> Want to save the logins?
+        <button><a href="http://localhost:5000/savecredspage" target="_blank" id="savecreds">saveCreds</a> </button>
+    </p>
+    <p>
+        generate password <button> <a href="http://localhost:5000/" id="generatepass">generatepass</a> </button>
+    </p>
+    <p>
+        <button> <a href="http://localhost:5000/" id="dashboard">dashboard</a> </button>
+    </p>
+    <button> <a href="http://localhost:5000/viewcreds" target="_blank" id="view_creds">view_creds</a> </button>
+
+</body>
+
+</html>

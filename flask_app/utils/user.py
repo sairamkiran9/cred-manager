@@ -36,9 +36,12 @@ class User:
         cur = con.cursor()
         res = cur.execute(f"SELECT * FROM {table} WHERE {key} = ?", (value,))
         data = res.fetchall()
-        print(data)
-        data[0][4] = self.crypto.decrypt_data(data[0][4])
-        return data
+        if (data and len(data[0])>=1):
+            data = list(data[0])
+            print("list: ", data)
+            data[4] = self.crypto.decrypt_data(data[4])
+            return [data]
+        return []
 
     def put_data(self, url=None, email=None, username=None, password=None):
         con = sqlite3.connect("userDetails.db")
@@ -64,7 +67,7 @@ class User:
 def main():
     print("mainnn")
     user = User()
-    print(user.conn)
+    # print(user.conn)
     user.create_table()
     print(user.get_alldata("users"))
     user.put_data("url1", "kiran@gmail.com", "kiran9", "pop")
@@ -76,6 +79,6 @@ def main():
     user.remove_data("daas")
     print("Final data")
     print("Data: ", user.get_alldata("users"))
-    print("data: ", user.get_data("url", "url1"))
+    print("data: ", user.get_data("users","url", "url1"))
 
 # main()

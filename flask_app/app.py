@@ -1,11 +1,12 @@
+
+
+
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sys
 import json
 sys.path.append('./utils')  # Replace with the actual path to myfolder
-from user import User
 from temp import generate
-
-
+from user import User
 
 app = Flask(__name__)
 
@@ -65,22 +66,38 @@ def auto_fill():
     return response
 
 
-@app.route("/savecreds")
-def save_details():
+@app.route("/popup")
+def popup():
     response = {}
-    data = request.get_json()
-    print("data: ", data)
-    if user.put_data(username=data["username"], password=data["password"]):
+    url = request.args.get('url')
+    print("url: ", url)
+    return render_template("bs.html", url=url)
+
+
+@app.route("/savecreds", methods=["POST"])
+def save_creds():
+    username = request.form["username"]
+    password = request.form["password"]
+    email = request.form["email"]
+    url = request.form["webpage_url"]
+    if url and username and user.put_data(
+        url=url,
+        username=username,
+        password=password,
+        email=email
+    ):
         fetch_data = user.get_data(
-            table="users", key="username", value=data["username"])
+            table="users", key="username", value=username)
         print("fetched data: ", fetch_data)
-        return "Data saved sucessfully"
-    return "Data not saved sucessfully"
+        return "Success!"
+    else:
+        return redirect(url_for('save_creds_page', flag=1))
 
 
 @app.route("/savecredspage")
-def save_creds():
-    return render_template("save_passwords.html")
+def save_creds_page():
+    flag = request.args.get('flag')
+    return render_template('save_passwords.html', flag = flag)
 
 
 @app.route("/viewcreds")
