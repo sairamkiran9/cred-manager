@@ -18,17 +18,10 @@ observer.observe(document, {
 });
 
 
-const isTest = document.getElementById('asdf');
-console.log("isTest: ", isTest)
-if(isTest!= null){
-    isTest.innerHTML = "prevUrl";
-}
-
 const urlHref = document.getElementById('savecreds');
 if(urlHref!=null){
     const url = prevUrl.split('?url=');
     urlHref.href = "http://localhost:3000/savecreds/" + "?url=" + url[url.length - 1];
-    isTest.innerHTML = url[url.length - 1];
 }
 
 // init on load
