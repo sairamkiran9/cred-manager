@@ -1,6 +1,6 @@
 creds*
 chrome*
 cm-*
-server/
-flask_app/__*
+*__pycache__
+*.db
 *.json

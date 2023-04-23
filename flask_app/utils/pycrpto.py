@@ -31,16 +31,16 @@ class CMChiper:
 
     def encrypt_data(self, data):
         encrypted_data = self.fernet.encrypt(data.encode())
-        return encrypted_data
+        return encrypted_data.decode()
 
     def decrypt_data(self, encrypted_data):
-        decrypted_data = self.fernet.decrypt(encrypted_data).decode()
+        decrypted_data = self.fernet.decrypt(encrypted_data.encode()).decode()
         return decrypted_data
-    
-def main():       
+
+
+def main():
     cm = CMChiper()
     ed = cm.encrypt_data("1234")
     dd = cm.decrypt_data(ed)
     print("ed: ", ed, " dd: ", dd)
-
 # main()
