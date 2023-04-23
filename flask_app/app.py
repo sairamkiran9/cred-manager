@@ -91,13 +91,13 @@ def save_creds():
         print("fetched data: ", fetch_data)
         return "Success!"
     else:
-        return redirect(url_for('save_creds_page', flag=1))
+        return redirect(url_for('save_creds_page'))
 
 
 @app.route("/savecredspage")
 def save_creds_page():
     flag = request.args.get('flag')
-    return render_template('save_passwords.html', flag = flag)
+    return render_template('save_passwords.html')
 
 
 @app.route("/viewcreds")
@@ -110,7 +110,7 @@ def view_data():
 def generate_password():
     data = generate()
     print("generated password: ", data)
-    return f"{data}"
+    return data
 
 
 if __name__ == "__main__":
