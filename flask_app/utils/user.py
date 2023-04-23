@@ -42,7 +42,6 @@ class User:
             data[4] = self.crypto.decrypt_data(data[4])
             return [data]
         return []
-
     def put_data(self, url=None, email=None, username=None, password=None):
         con = sqlite3.connect("userDetails.db")
         cur = con.cursor()

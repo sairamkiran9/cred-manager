@@ -1,4 +1,5 @@
-let prevUrl = location.href;
+let pre
+vUrl = location.href;
 
 console.log('prevUrl: ', prevUrl);
 
