@@ -1,6 +1,3 @@
-
-
-
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import sys
 import json
@@ -10,14 +7,23 @@ from user import User
 
 app = Flask(__name__)
 
+@app.route('/data')
+def get_time():
+    # Returning an api for showing in  reactjs
+    return {
+        'Name':"geek", 
+        "Age":"22",
+        "Date":10, 
+        "programming":"python"
+        }
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         username = request.form['username']
         password = request.form['password']
-        email = request.form['email']
+        # email = request.form['email']
         return redirect(url_for('message', name=username))
     elif request.method == 'POST':
         msg = 'Please fill out the form !'
@@ -60,8 +66,8 @@ def auto_fill():
     print("fetched data: ", data)
     if data:
         response = {
-            "username": data[0][3],
-            "password": data[0][4]
+            "username": data[0][2],
+            "password": data[0][3]
         }
     return response
 
@@ -76,22 +82,22 @@ def popup():
 
 @app.route("/savecreds", methods=["POST"])
 def save_creds():
-    username = request.form["username"]
-    password = request.form["password"]
-    email = request.form["email"]
-    url = request.form["webpage_url"]
+    data = request.get_json()
+    username = data["username"]
+    password = data["password"]
+    # email = data["email"]
+    url = data["url"]
     if url and username and user.put_data(
         url=url,
         username=username,
-        password=password,
-        email=email
+        password=password
     ):
         fetch_data = user.get_data(
             table="users", key="username", value=username)
         print("fetched data: ", fetch_data)
-        return "Success!"
+        return "Data saved successfully!"
     else:
-        return redirect(url_for('save_creds_page'))
+        return "Data failed to save!"
 
 
 @app.route("/savecredspage")
@@ -103,8 +109,9 @@ def save_creds_page():
 @app.route("/viewcreds")
 def view_data():
     data = user.get_alldata("users")
-    return render_template('table.html', data=data)
-
+    dict_data = [dict(zip(('id', 'url', 'username', 'password'), d)) for d in data]
+    json_data = json.dumps(dict_data)
+    return json_data
 
 @app.route("/generatepassword")
 def generate_password():
