@@ -3,59 +3,43 @@ import { fireAuth, fireDb } from "../firebase";
 
 export const addCreds = async (cred) => {
     const email = fireAuth.currentUser.email;
-    const docRef = await getDoc(doc(fireDb, "users", email));
-    const data = docRef.data();
-    if (data !== undefined) {
+    let data = (await getDoc(doc(fireDb, "users", email))).data();
+    if (data && data.creds.filter((e) => e.url !== cred.url)) {
+        data.creds = data.creds.filter((e) => e.url !== cred.url);
         const docs = doc(fireDb, "users", email);
-        await setDoc(docs, {
-            ...data,
-            creds: [...data["creds"], cred],
-        });
+        data.creds.push(cred);
+        await setDoc(docs, data);
+        console.log("email: ", email);
     }
+};
+
+export const getCreds = async (url) => {
+    const email = fireAuth.currentUser.email;
+    const data = (await getDoc(doc(fireDb, "users", email))).data();
+    data.creds = data.creds.filter((e) => e.url === url);
+    return JSON.stringify(data.creds[0]);
+    
+};
+
+export const getAllCreds = async () => {
+    const email = fireAuth.currentUser.email;
+    const data = (await getDoc(doc(fireDb, "users", email))).data();
+    return data.creds;
 };
 
 export const removeCreds = async (cred) => {
     const email = fireAuth.currentUser.email;
-    const docRef = await getDoc(doc(fireDb, "users", email));
-    const data = docRef.data();
-    if (data !== undefined) {
-        await setDoc(doc(fireDb, "users", email), {
-            ...data,
-            creds: data["creds"].filter((e) => e !== cred),
-        });
+    let data = (await getDoc(doc(fireDb, "users", email))).data();
+    if (data.creds = data.creds.filter((e) => e.url !== cred.url)) {
+        const docs = doc(fireDb, "users", email);
+        await setDoc(docs, data);
+        console.log("done");
     }
-};
-
-export const editCreds = async (oldcred, newcred) => {
-    const email = fireAuth.currentUser.email;
-    const docRef = await getDoc(doc(fireDb, "users", email));
-    const data = docRef.data();
-    if (data !== undefined) {
-        await setDoc(doc(fireDb, "users", email), {
-            ...data,
-            creds: data["creds"].map((str) =>
-                str === oldcred ? newcred : str
-            ),
-        });
-    }
-};
-
-export const getCreds = async () => {
-    const email = fireAuth.currentUser.email;
-    const docRef = await getDoc(doc(fireDb, "users", email));
-    const data = docRef.data();
-    console.log(data.creds);
-    return data.creds;
 };
 
 export const createUser = async (email) => {
     const docs = doc(fireDb, "users", email);
     await setDoc(docs, {
-        creds: {
-            url: "",
-            email: "",
-            username: "",
-            password: ""
-        }
+        creds: []
     });
 };

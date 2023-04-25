@@ -19,6 +19,7 @@ chrome.tabs.onActivated.addListener(getCurrentTab);
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.action === 'sendGetRequest') {
+        console.log("request.url", request.url)
         fetch(request.url)
             .then(response => response.text())
             .then(data => sendResponse(data))
@@ -32,8 +33,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             focused: true,
             top: 150,
             left: 150,
-            width: 400,
-            height: 400
+            width: 500,
+            height: 500
         });
         console.log("save creds popup window created", request.url);
         fetch(request.url)

@@ -3,9 +3,47 @@ import sys
 import json
 sys.path.append('./utils')  # Replace with the actual path to myfolder
 from temp import generate
+from pycrpto import CMChiper
 from user import User
 
+import firebase_admin
+from firebase_admin import auth, db, credentials, firestore
+
 app = Flask(__name__)
+cred = credentials.Certificate('config.json')
+firebase_admin.initialize_app(cred)
+db = firestore.client()
+
+@app.route('/user/<email>')
+def get_user_by_email(email):
+    try:
+        user = auth.get_user_by_email(email)
+        return user.uid
+    except auth.AuthError as e:
+        print('Error fetching user:', e)
+        return None
+    
+@app.route('/firedb')
+def get_collection_data():
+    collection_name = "users"
+    docs = db.collection(collection_name).get()
+    data = [doc.to_dict() for doc in docs]
+    return data[0]["creds"]
+
+@app.route('/geturlcreds')
+def get_data():
+    url = request.args.get('url')
+    collection_name = "users"
+    docs = db.collection(collection_name).get()
+    data = [doc.to_dict() for doc in docs]
+    for cred in data[0]["creds"]:
+        if cred["url"] == url:
+            return cred
+    return {}
+
+@app.route('/apikey')
+def get_key():
+    return cm.key
 
 @app.route('/data')
 def get_time():
@@ -17,46 +55,7 @@ def get_time():
         "programming":"python"
         }
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
-        username = request.form['username']
-        password = request.form['password']
-        email = request.form['email']
-        return redirect(url_for('message', name=username))
-    elif request.method == 'POST':
-        msg = 'Please fill out the form !'
-        return render_template('register.html', msg=msg)
-    return render_template('register.html', msg=msg)
-
-
-@app.route("/")
-def login():
-    return render_template("login.html")
-
-
-@app.route("/", methods=["POST"])
-def login_post():
-    username = request.form["username"]
-    password = request.form["password"]
-    return redirect(url_for('message', name=username))
-
-
-@app.route("/message")
-def message():
-    name = request.args.get('name')
-    return render_template("home.html", name=name)
-
-
-@app.route("/hello")
-def hello():
-    print(request.args.get('body'))
-    return "srivennala"
-
 # Cred manager methods
-
-
 @app.route("/fetchuser")
 def auto_fill():
     response = {}
@@ -66,8 +65,8 @@ def auto_fill():
     print("fetched data: ", data)
     if data:
         response = {
-            "username": data[0][3],
-            "password": data[0][4]
+            "username": data[0][2],
+            "password": data[0][3]
         }
     return response
 
@@ -85,20 +84,18 @@ def save_creds():
     data = request.get_json()
     username = data["username"]
     password = data["password"]
-    email = data["email"]
     url = data["url"]
     if url and username and user.put_data(
         url=url,
         username=username,
-        password=password,
-        email=email
+        password=password
     ):
         fetch_data = user.get_data(
             table="users", key="username", value=username)
         print("fetched data: ", fetch_data)
-        return "Data saved successfully!"
+        return {"msg": "Details saved successfully!", "status":200}
     else:
-        return "Data failed to save!"
+        return {"msg": "Details already exists", "status":400}
 
 
 @app.route("/savecredspage")
@@ -110,7 +107,7 @@ def save_creds_page():
 @app.route("/viewcreds")
 def view_data():
     data = user.get_alldata("users")
-    dict_data = [dict(zip(('id', 'url', 'email', 'username', 'password'), d)) for d in data]
+    dict_data = [dict(zip(('id', 'url', 'username', 'password'), d)) for d in data]
     json_data = json.dumps(dict_data)
     return json_data
 
