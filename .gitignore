@@ -1,3 +1,6 @@
-creds.csv
+creds*
 chrome*
-cm-chrome*
+cm-*
+*__pycache__
+*.db
+*.json

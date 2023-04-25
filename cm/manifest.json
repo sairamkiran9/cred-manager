@@ -7,13 +7,20 @@
         "default_popup": "popup.html"
     },
     "host_permissions": [
+        "chrome-extension://*",
         "http://*/*",
         "https://*/*"
     ],
     "permissions": [
+        "chrome-extension://*",
         "http://*/*",
         "https://*/*",
-        "storage"
+        "storage",
+        "activeTab",
+        "webNavigation",
+        "webRequest",
+        "scripting",
+        "tabs"
     ],
     "content_scripts": [
         {
@@ -26,10 +33,18 @@
             ]
         }
     ],
-    "storage": {
-        "managed_schema": "managed_schema.json"
-    },
     "background": {
         "service_worker": "scripts/background.js"
-    }
+    },
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "popup.html",
+                "bs.html"
+            ],
+            "matches": [
+                "*://*/*"
+            ]
+        }
+    ]
 }

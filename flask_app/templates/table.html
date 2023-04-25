@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Link to Bootstrap stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/css/bootstrap.min.css">
+
+    <!-- Link to jQuery library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Link to Bootstrap JavaScript files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Link to third-party plugin -->
+    <script src="path/to/plugin.js"></script>
+
+    <title>ViewDb</title>
+</head>
+
+<body>
+    <!-- Your HTML code goes here -->
+
+    <head>
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th,
+            td {
+                border: 1px solid black;
+                padding: 8px;
+                text-align: left;
+            }
+
+            th {
+                background-color: lightgrey;
+            }
+        </style>
+    </head>
+
+    <body>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Website</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in data %}
+                <tr>
+                    <td>{{ row[0] }}</td>
+                    <td>{{ row[1] }}</td>
+                    <td>{{ row[2] }}</td>
+                    <td>{{ row[3] }}</td>
+                    <td>{{ row[4] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </body>
+</body>
+
+</html>
