@@ -34,15 +34,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function ViewCreds(props) {
-    // const [creds, setCreds] = useState([]);
+function ViewCreds() {
     const [data, setData] = useState([]);
-    const [isHovered, setHover] = useState(false);
-    const handleFocus = () => {
-        setHover(true);
+    const [isHovered, setHover] = useState(null);
+
+    const handleData = (index, password) => {
+        return index != null && index == isHovered ? password : "***"
+    }
+
+    const handleFocus = (index) => {
+        setHover(index);
     }
     const handleBlur = () => {
-        setHover(false);
+        setHover(null);
     }
 
     useEffect(() => {
@@ -58,12 +62,11 @@ function ViewCreds(props) {
                 );
             }
         })
-
     }, []);
 
     return (
         <div>
-            <h1>Creds Database</h1>
+            <h1 style={{color:"white"}}>Creds Database</h1>
             {/* {test && (
                 <div>
                     <p>{test.url}</p>
@@ -73,20 +76,21 @@ function ViewCreds(props) {
             )} */}
             <TableContainer component={Paper}>
                 <Table>
-                    <TableHead>
+                    <TableHead >
                         <TableRow>
-                            <StyledTableCell align="right">url</StyledTableCell>
-                            <StyledTableCell align="right">username</StyledTableCell>
-                            <StyledTableCell align="right">password</StyledTableCell>
-                            <StyledTableCell align="right"></StyledTableCell>
+                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">url</StyledTableCell>
+                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">username</StyledTableCell>
+                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">password</StyledTableCell>
+                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center"></StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {data && data.map((row) => (
+                        {data && data.map((row, index) => (
                             <StyledTableRow key={row.url}>
-                                <StyledTableCell align="right">{row.url}</StyledTableCell>
-                                <StyledTableCell align="right">{row.username}</StyledTableCell>
-                                <StyledTableCell align="right" id="hide">{row.password}</StyledTableCell>
+                                <StyledTableCell align="center">{row.url}</StyledTableCell>
+                                <StyledTableCell align="center">{row.username}</StyledTableCell>
+                                <StyledTableCell align="center" id={row.password}>{handleData(index, row.password)}</StyledTableCell>
+                                <StyledTableCell align="center"><button style={{height: "50px", width: "0px"}} onMouseOver={()=>handleFocus(index)} onMouseOut={handleBlur}>ol</button></StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
