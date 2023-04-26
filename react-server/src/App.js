@@ -2,8 +2,7 @@ import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import "./App.css";
 import Login from "./components/loginPage";
 import Registration from "./components/registrationPage";
-import H
-ome from "./components/homePage";
+import Home from "./components/homePage";
 import Test from "./test";
 import SaveCredentials from "./components/saveCredsPage";
 import ViewCreds from "./components/viewCreds";
@@ -13,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import Appp from "./components/Appp";
 import GetUrlCreds from "./components/getCredsByUrl";
 import EncryptDecrypt from "./components/encryptDecrypt";
-import ActionAreaCard from "./components/UI.j";
 
 function App() {
   const { url } = useParams();
