@@ -21,6 +21,7 @@ observer.observe(document, {
 const urlHref = document.getElementById('savecreds');
 if (urlHref != null) {
     const url = prevUrl.split('?url=');
+    console.log("parsed url: ", url);
     urlHref.href = "http://localhost:3000/savecreds/" + "?url=" + url[url.length - 1];
 }
 
