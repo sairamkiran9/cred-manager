@@ -56,7 +56,6 @@ function SaveCredentials(props) {
   });
 
   function openLoginInfo() {
-    // document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.b-form').forEach(function (form) {
       form.style.opacity = "0.01";
     });
@@ -66,11 +65,9 @@ function SaveCredentials(props) {
     document.querySelectorAll('.box-info').forEach(function (form) {
       form.style.right = "-37%";
     });
-    // });
   }
 
   function closeLoginInfo() {
-    // document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll('.b-form').forEach(function (form) {
       form.style.opacity = "1";
     });
@@ -80,7 +77,6 @@ function SaveCredentials(props) {
     document.querySelectorAll('.box-info').forEach(function (form) {
       form.style.right = "-5px";
     });
-    // });
   }
 
   window.addEventListener('resize', function () {
@@ -100,52 +96,10 @@ function SaveCredentials(props) {
     }, () => {
       console.log("Details updated successfully!");
     });
-
-    // fetch('/savecreds', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     url: url,
-    //     username: username,
-    //     password: password,
-    //   }),
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    //   .then(response => response.text())
-    //   .then(data => {
-    //     data = JSON.parse(data);
-    //     if (data.status === 200) {
-    //       toast.success(data.msg);
-    //     } else {
-    //       toast.error(data.msg);
-    //     }
-
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error:', error);
-    //     toast.error('Something went wrong');
-    //   });
     console.log("creds saved!")
   };
 
   return (
-    // <div>
-    //   <h1>Save Credentials</h1>
-    //   <form onSubmit={handleSubmit}>
-    //     <label>
-    //       Site URl:
-    //       <input type="text" value={url} onChange={() => { }} />
-    //     </label>
-    //     <label>
-    //       Username:
-    //       <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-    //     </label>
-    //     <PasswordInput />
-    //     <button type="submit">Save</button>
-    //   </form>
-    // </div>
-
     <div className='box'>
       <div className='box-form'>
         <div className='box-login-tab'></div>
@@ -155,7 +109,6 @@ function SaveCredentials(props) {
         </div>
         <div className='box-login'>
           <div className='fieldset-body' id='login_form'>
-            {/* <button onClick={openLoginInfo} className='b b-form i i-more' title='Mais Informações'></button> */}
             <p className='field'>
             <label>
               Login site URL:
@@ -168,8 +121,6 @@ function SaveCredentials(props) {
               <span id='valida' className='i i-warning'></span>
             </p>
             <p className='field'>
-              {/* <label for='pass'>PASSWORD</label> */}
-              {/* <input type='password' id='pass' name='pass' title='Password' value={password} onChange={(e) => setPassword(e.target.value)} /> */}
               <PasswordInput onPasswordChange={handlePasswordChange} />
               <span id='valida' className='i i-close'></span>
             </p>

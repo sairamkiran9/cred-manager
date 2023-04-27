@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     }
     else if (request.action === "save_creds_popup") {
         chrome.windows.create({
-            url: chrome.runtime.getURL("bs.html")+"?url="+request.url,
+            url: chrome.runtime.getURL("bs.html") + "?url=" + request.url,
             type: "popup",
             focused: true,
             top: 150,
