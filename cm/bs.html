@@ -18,19 +18,36 @@
         crossorigin="anonymous"></script>
     <script type="module" src="./scripts/content.js"></script>
     <style>
-        h1 {
+        h1,
+        p,
+        a {
             color: #faf7f7;
             text-align: center;
+            margin: 5px;
         }
+
+        #buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #img{
+            width: 50px;
+            height: 50px;
+        }
+
     </style>
 </head>
 
 <body>
-    <h1>CredManager</h1>
-    <p> Some description to make sense about the extension </p>
-    <a class="btn btn-info" role="button" href="http://localhost:3000/savecreds" id="savecreds">saveCreds</a>
-    <a class="btn btn-info" role="button" href="http://localhost:3000/home" id="dashboard">dashboard</a>
-    <a class="btn btn-info" role="button" href="http://localhost:3000/viewcreds" id="view_creds">view_creds</a>
+    <h1><img id="img" src="CM1.png" alt="Hidden" /> CredManager</h1>
+    <!-- <br></br> -->
+    <p> One place to secure your passwords safely </p>
+    <div id="buttons">
+        <a class="btn btn-info" role="button" href="http://localhost:3000/savecreds" id="savecreds">saveCreds</a>
+        <a class="btn btn-info" role="button" href="http://localhost:3000/home" id="dashboard">dashboard</a>
+        <a class="btn btn-info" role="button" href="http://localhost:3000/viewcreds" id="view_creds">view_creds</a>
+    </div>
 
 </body>
 
