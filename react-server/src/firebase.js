@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
+import firebase from "firebase/app";
 import { collection, getFirestore } from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -26,4 +27,7 @@ export const fireAuth = getAuth(app);
 export const fireDb = getFirestore(app);
 export const users = collection(fireDb, "users");
 export const logins = collection(fireDb, "logins");
+// export const mfaAuth = PhoneAuthProvider();
+
+// export const authEmail = auth(app);
 

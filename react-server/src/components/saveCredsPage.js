@@ -125,7 +125,7 @@ function SaveCredentials(props) {
               <span id='valida' className='i i-close'></span>
             </p>
 
-            <input type='submit' id='do_login' value='REGISTER' title='Get Started' onClick={handleSubmit} />
+            <input type='submit' id='do_login' value='SAVE' title='Get Started' onClick={handleSubmit} />
           </div>
         </div>
       </div>
