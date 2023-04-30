@@ -18,7 +18,7 @@ function App() {
   return (
     <div className="App">
       <ToastContainer />
-      {<OTPVerification />}
+      {/* {<OTPVerification />} */}
       <BrowserRouter>
         <Routes>
           <Route index element={<Login />} />
@@ -29,6 +29,7 @@ function App() {
           <Route path="savecreds" element={<SaveCredentials />} />
           <Route path="viewcreds" element={<ViewCreds />} />
           <Route path="geturlcreds" element={<GetUrlCreds />} />
+          <Route path="otp" element={<OTPVerification />} />
           <Route path="*" element={<div>404 NOT FOUND</div>} />
           <Route path="/url/:url" element={<Url />} />
         </Routes>

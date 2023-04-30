@@ -1,48 +1,50 @@
 
 import { fireAuth } from "../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-// import firebase from "firebase/app";
 import { useState } from 'react';
-
-// fireAuth.settings.appVerificationDisabledForTesting = false;
-
-const sendOTP = async (phoneNumber) => {
-    console.log("asdasd")
-    const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-        'size': 'invisible',
-        'callback': (response) => {
-            console.log(response)
-        },
-        'expired-callback': () => {
-            console.log("Response expired. Ask user to solve reCAPTCHA again")
-        }
-    }, fireAuth);
-    const confirmationResult = await signInWithPhoneNumber(fireAuth, phoneNumber, recaptchaVerifier);
-    return confirmationResult;
-};
-
-const verifyOTP = async (confirmationResult, code) => {
-    // const userCredential = await confirmationResult.confirm(code);
-    // console.log("usercred", userCredential)
-    confirmationResult.confirm(code).then((result) => {
-        // User signed in successfully.
-        const user = result.user;
-        console.log("user success", result, code)
-        // ...
-      }).catch((error) => {
-        console.log(error)
-      });
-    // return userCredential;
-};
+import { useLocation } from 'react-router-dom';
+import CryptoJS from "crypto-js";
 
 function OTPVerification() {
-    const [phoneNumber, setPhoneNumber] = useState("");
+    
+    // const { state } = useLocation();
+    const phoneNumber = "+18509434453";
     const [confirmationResult, setConfirmationCode] = useState("");
     const [code, setCode] = useState("");
+    const [isVerified, setVerify] = useState(false);
 
-    const handlePhoneNumberChange = (event) => {
-        setPhoneNumber(event.target.value.toString());
+    // console.log("state: ",state); 
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const url = urlParams.get('url');
+    const username = urlParams.get('username');
+    const password = urlParams.get('password');
+
+    const sendOTP = async (phoneNumber) => {
+        const recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible',
+            'callback': (response) => {
+                console.log(response)
+            },
+            'expired-callback': () => {
+                console.log("Response expired. Ask user to solve reCAPTCHA again")
+            }
+        }, fireAuth);
+        const confirmationResult = await signInWithPhoneNumber(fireAuth, phoneNumber, recaptchaVerifier);
+        return confirmationResult;
     };
+    
+    const verifyOTP = async (confirmationResult, code) => {
+        confirmationResult.confirm(code).then((result) => {
+            handleVerify();
+        }).catch((error) => {
+            console.log(error)
+        });
+    };
+
+    const handleVerify = () => {
+        setVerify(true);
+    }
 
     const handleCodeChange = (event) => {
         setCode(event.target.value);
@@ -57,25 +59,16 @@ function OTPVerification() {
 
     const handleVerifyOTP = async (event) => {
         event.preventDefault();
-        // const userCredential = await verifyOTP(confirmationResult, code);
-        // console.log("user verified", userCredential, "suc");
         await verifyOTP(confirmationResult, code);
     };
 
     return (
         <div>
             <form onSubmit={handleSendOTP}>
-                <label>
-                    Phone Number:
-                    <input
-                        type="text"
-                        name="phoneNumber"
-                        value={phoneNumber}
-                        onChange={handlePhoneNumberChange}
-                    />
-                </label>
+                <p> Verify user to get credentials </p>
                 <button type="submit">Send OTP</button>
             </form>
+            
             <form onSubmit={handleVerifyOTP}>
                 <label>
                     OTP Code:
@@ -88,6 +81,7 @@ function OTPVerification() {
                 </label>
                 <button type="submit">Verify OTP</button>
             </form>
+            <p>{url}{username}: {isVerified ? password : ""}</p>
             <div id="recaptcha-container"></div>
         </div>
     );

@@ -12,7 +12,6 @@ import Paper from '@mui/material/Paper';
 import { fireAuth } from "../firebase";
 import CryptoJS from "crypto-js";
 
-
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
         backgroundColor: theme.palette.common.black,
@@ -48,6 +47,19 @@ function ViewCreds() {
         setHover(null);
     }
 
+    const openPopup = (url, username, password) => {
+        window.open(
+            `/otp?username=${username}&password=${password}&url=${url}`,
+            "examplePopup",
+            "width=300,height=300"
+        );
+    }
+
+    const handleClick = (index, username, password) => {
+        const decryptedPass = CryptoJS.AES.decrypt(password, "secret key").toString(CryptoJS.enc.Utf8);
+        openPopup(username, decryptedPass);
+    }
+
     useEffect(() => {
         fireAuth.onAuthStateChanged(async (user) => {
             if (user) {
@@ -71,8 +83,8 @@ function ViewCreds() {
                     <TableHead >
                         <TableRow>
                             <StyledTableCell style={{ backgroundColor: "#ba323c", maxWidth: "100px" }} align="center">url</StyledTableCell>
-                            <StyledTableCell style={{ backgroundColor: "#ba323c", minWidth: "100px"}} align="center">username</StyledTableCell>
-                            <StyledTableCell style={{ backgroundColor: "#ba323c",  minWidth: "500px"}} align="center">password</StyledTableCell>
+                            <StyledTableCell style={{ backgroundColor: "#ba323c", minWidth: "100px" }} align="center">username</StyledTableCell>
+                            <StyledTableCell style={{ backgroundColor: "#ba323c", minWidth: "500px" }} align="center">password</StyledTableCell>
                             <StyledTableCell style={{ backgroundColor: "#ba323c" }} align="center"></StyledTableCell>
                         </TableRow>
                     </TableHead>
@@ -82,7 +94,15 @@ function ViewCreds() {
                                 <StyledTableCell align="center">{row.url}</StyledTableCell>
                                 <StyledTableCell align="center">{row.username}</StyledTableCell>
                                 <StyledTableCell align="center" id={row.password}>{handleData(index, row.password)}</StyledTableCell>
-                                <StyledTableCell align="center"><button onMouseOver={() => handleFocus(index)} onMouseOut={handleBlur} ><img style={{ height: "30px", width: "30px", opacity: "30%" }} src={process.env.PUBLIC_URL + "/static/images/eyee.jpg"} alt="Hidden" /></button></StyledTableCell>
+                                <StyledTableCell align="center"><button
+                                    onMouseOver={() => handleFocus(index)}
+                                    onMouseOut={handleBlur}
+                                    onDoubleClick={() => handleClick(index, row.url, row.username, row.password)}>
+                                    <img style={{ height: "30px", width: "30px", opacity: "30%" }}
+                                        src={process.env.PUBLIC_URL + "/static/images/eyee.jpg"}
+                                        alt="Hidden" />
+                                </button>
+                                </StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>
