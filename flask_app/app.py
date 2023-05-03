@@ -1,7 +1,6 @@
 from firebase_admin import auth, db, credentials, firestore
 import firebase_admin
 import sys
-import json
 sys.path.append('./utils') 
 from user import User
 from pycrpto import CMChiper
@@ -9,8 +8,7 @@ from temp import generate
 from flask import Flask, render_template, request, redirect, url_for, jsonify
  # Replace with the actual path to myfolder
 
-
-app = Flask(__name__)
+app = Flask(_name_)
 cred = credentials.Certificate('config.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
