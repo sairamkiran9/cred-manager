@@ -1,22 +1,22 @@
 
 import { fireAuth } from "../firebase";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import CryptoJS from "crypto-js";
+import React, { useState } from 'react';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+
 
 function OTPVerification() {
-    
-    // const { state } = useLocation();
     const phoneNumber = "+18509434453";
     const [confirmationResult, setConfirmationCode] = useState("");
     const [code, setCode] = useState("");
     const [isVerified, setVerify] = useState(false);
 
-    // console.log("state: ",state); 
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    const url = urlParams.get('url');
+    // const url = urlParams.get('url');
     const username = urlParams.get('username');
     const password = urlParams.get('password');
 
@@ -33,7 +33,7 @@ function OTPVerification() {
         const confirmationResult = await signInWithPhoneNumber(fireAuth, phoneNumber, recaptchaVerifier);
         return confirmationResult;
     };
-    
+
     const verifyOTP = async (confirmationResult, code) => {
         confirmationResult.confirm(code).then((result) => {
             handleVerify();
@@ -64,26 +64,39 @@ function OTPVerification() {
 
     return (
         <div>
-            <form onSubmit={handleSendOTP}>
-                <p> Verify user to get credentials </p>
-                <button type="submit">Send OTP</button>
-            </form>
-            
-            <form onSubmit={handleVerifyOTP}>
-                <label>
-                    OTP Code:
-                    <input
-                        type="text"
-                        name="code"
-                        value={code}
-                        onChange={handleCodeChange}
-                    />
-                </label>
-                <button type="submit">Verify OTP</button>
-            </form>
-            <p>{url}{username}: {isVerified ? password : ""}</p>
+            <Card sx={{ minWidth: 275, margin: 5 }}>
+                <CardActions>
+                    <form onSubmit={handleSendOTP}>
+                        <label>Verify user to get credentials 
+                            <button style={{"margin":3}} type="submit">Send OTP</button></label>
+                    </form>
+                </CardActions>
+                <CardActions>
+                    <form onSubmit={handleVerifyOTP}>
+                        <label>
+                            OTP Code:
+                            <input
+                                type="text"
+                                name="code"
+                                value={code}
+                                onChange={handleCodeChange}
+                            />
+                        </label>
+                        <button type="submit">Verify OTP</button>
+                    </form>
+                </CardActions>
+                {isVerified && <CardContent>
+                    <Typography variant="h6" component="div">
+                        username: {username}
+                    </Typography>
+                    <Typography variant="h6" component="div">
+                        password: {password}
+                    </Typography>
+                </CardContent>}
+            </Card>
             <div id="recaptcha-container"></div>
         </div>
+
     );
 }
 
