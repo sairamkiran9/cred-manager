@@ -9,6 +9,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { getCreds, getAllCreds } from "../utils/utils";
+import { fireAuth, fireDb } from "../firebase";
+import CryptoJS from "crypto-js";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -30,49 +34,68 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     },
 }));
 
-function ViewCreds(props) {
-    const [creds, setCreds] = useState([]);
+function ViewCreds() {
+    const [data, setData] = useState([]);
+    const [isHovered, setHover] = useState(null);
+
+    const handleData = (index, password) => {
+        return index != null && index == isHovered ? password : "***"
+    }
+
+    const handleFocus = (index) => {
+        setHover(index);
+    }
+    const handleBlur = () => {
+        setHover(null);
+    }
 
     useEffect(() => {
-        fetch("/viewcreds").then((res) =>
-            res.json().then((creds) => {
-                setCreds(creds);
-                creds.forEach(item => {
-                    console.log(item);
-                });
-            })
-        );
+        fireAuth.onAuthStateChanged(async (user) => {
+            if (user) {
+                fetch("/firedb").then((res) =>
+                    res.json().then((creds) => {
+                        for (let i = 0; i < creds.length; i++) {
+                            creds[i]["password"] = CryptoJS.AES.encrypt(creds[i]["password"], "secret key").toString();
+                        }
+                        setData(creds);
+                    })
+                );
+            }
+        })
     }, []);
 
     return (
-        <div className="App">
-            <header className="App-header">
-                <h1>Creds Database</h1>
-                <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                        <TableHead>
-                            <TableRow>
-                                <StyledTableCell>ID</StyledTableCell>
-                                <StyledTableCell align="right">url</StyledTableCell>
-                                <StyledTableCell align="right">username&nbsp;</StyledTableCell>
-                                <StyledTableCell align="right">password&nbsp;</StyledTableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {creds.map((row) => (
-                                <StyledTableRow key={row.id}>
-                                    <StyledTableCell component="th" scope="row">
-                                        {row.id}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="right">{row.url}</StyledTableCell>
-                                    <StyledTableCell align="right">{row.username}</StyledTableCell>
-                                    <StyledTableCell align="right">{row.password}</StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </header>
+        <div>
+            <h1 style={{color:"white"}}>Creds Database</h1>
+            {/* {test && (
+                <div>
+                    <p>{test.url}</p>
+                    <p>{test.username}</p>
+                    <p>{test.password}</p>
+                </div>
+            )} */}
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead >
+                        <TableRow>
+                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">url</StyledTableCell>
+                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">username</StyledTableCell>
+                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">password</StyledTableCell>
+                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center"></StyledTableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {data && data.map((row, index) => (
+                            <StyledTableRow key={row.url}>
+                                <StyledTableCell align="center">{row.url}</StyledTableCell>
+                                <StyledTableCell align="center">{row.username}</StyledTableCell>
+                                <StyledTableCell align="center" id={row.password}>{handleData(index, row.password)}</StyledTableCell>
+                                <StyledTableCell align="center"><button style={{height: "50px", width: "50px"}} onMouseOver={()=>handleFocus(index)} onMouseOut={handleBlur}>ol</button></StyledTableCell>
+                            </StyledTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
         </div>
     );
 }
