@@ -9,10 +9,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { getCreds, getAllCreds } from "../utils/utils";
-import { fireAuth, fireDb } from "../firebase";
+import { fireAuth } from "../firebase";
 import CryptoJS from "crypto-js";
-
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -39,7 +37,7 @@ function ViewCreds() {
     const [isHovered, setHover] = useState(null);
 
     const handleData = (index, password) => {
-        return index != null && index == isHovered ? password : "***"
+        return index != null && index == isHovered ? password : "**************"
     }
 
     const handleFocus = (index) => {
@@ -47,6 +45,19 @@ function ViewCreds() {
     }
     const handleBlur = () => {
         setHover(null);
+    }
+
+    const openPopup = (url, username, password) => {
+        window.open(
+            `/otp?username=${username}&password=${password}&url=${url}`,
+            "examplePopup",
+            "width=300,height=300"
+        );
+    }
+
+    const handleClick = (index, username, password) => {
+        const decryptedPass = CryptoJS.AES.decrypt(password, "secret key").toString(CryptoJS.enc.Utf8);
+        openPopup(username, decryptedPass);
     }
 
     useEffect(() => {
@@ -66,22 +77,15 @@ function ViewCreds() {
 
     return (
         <div>
-            <h1 style={{color:"white"}}>Creds Database</h1>
-            {/* {test && (
-                <div>
-                    <p>{test.url}</p>
-                    <p>{test.username}</p>
-                    <p>{test.password}</p>
-                </div>
-            )} */}
+            <h1 style={{ color: "white" }}>CredManager Database</h1>
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead >
                         <TableRow>
-                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">url</StyledTableCell>
-                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">username</StyledTableCell>
-                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center">password</StyledTableCell>
-                            <StyledTableCell style={{backgroundColor: "#df405a"}} align="center"></StyledTableCell>
+                            <StyledTableCell style={{ backgroundColor: "#ba323c", maxWidth: "100px" }} align="center">url</StyledTableCell>
+                            <StyledTableCell style={{ backgroundColor: "#ba323c", minWidth: "100px" }} align="center">username</StyledTableCell>
+                            <StyledTableCell style={{ backgroundColor: "#ba323c", minWidth: "500px" }} align="center">password</StyledTableCell>
+                            <StyledTableCell style={{ backgroundColor: "#ba323c" }} align="center"></StyledTableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -90,7 +94,15 @@ function ViewCreds() {
                                 <StyledTableCell align="center">{row.url}</StyledTableCell>
                                 <StyledTableCell align="center">{row.username}</StyledTableCell>
                                 <StyledTableCell align="center" id={row.password}>{handleData(index, row.password)}</StyledTableCell>
-                                <StyledTableCell align="center"><button style={{height: "50px", width: "50px"}} onMouseOver={()=>handleFocus(index)} onMouseOut={handleBlur}>ol</button></StyledTableCell>
+                                <StyledTableCell align="center"><button
+                                    onMouseOver={() => handleFocus(index)}
+                                    onMouseOut={handleBlur}
+                                    onDoubleClick={() => handleClick(index, row.url, row.username, row.password)}>
+                                    <img style={{ height: "30px", width: "30px", opacity: "30%" }}
+                                        src={process.env.PUBLIC_URL + "/static/images/eyee.jpg"}
+                                        alt="Hidden" />
+                                </button>
+                                </StyledTableCell>
                             </StyledTableRow>
                         ))}
                     </TableBody>

@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "My Extension",
     "version": "1.0",
-    "description": "My poc credmanager",
+    "description": "CredManager",
     "action": {
         "default_popup": "popup.html"
     },

@@ -9,10 +9,8 @@ import ViewCreds from "./components/viewCreds";
 import Url from "./components/testUrl";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Appp from "./components/Appp";
 import GetUrlCreds from "./components/getCredsByUrl";
-import EncryptDecrypt from "./components/encryptDecrypt";
-import ActionAreaCard from "./components/UI.j";
+import OTPVerification from "./components/otp";
 
 function App() {
   const { url } = useParams();
@@ -20,9 +18,7 @@ function App() {
   return (
     <div className="App">
       <ToastContainer />
-      {/* <Appp /> */}
-      {/* <EncryptDecrypt /> */}
-      {/* {<ActionAreaCard />} */}
+      {/* {<OTPVerification />} */}
       <BrowserRouter>
         <Routes>
           <Route index element={<Login />} />
@@ -33,6 +29,7 @@ function App() {
           <Route path="savecreds" element={<SaveCredentials />} />
           <Route path="viewcreds" element={<ViewCreds />} />
           <Route path="geturlcreds" element={<GetUrlCreds />} />
+          <Route path="otp" element={<OTPVerification />} />
           <Route path="*" element={<div>404 NOT FOUND</div>} />
           <Route path="/url/:url" element={<Url />} />
         </Routes>
