@@ -5,15 +5,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
-<<<<<<< HEAD
-import Divider from '@mui/material/Divider';
-import { styled } from '@mui/material/styles';
-import MuiGrid from '@mui/material/Grid';
-
-const Grid = styled(MuiGrid)(({ theme }) => ({
-    width: '100%',
-    top: '1000',
-=======
 import { styled } from '@mui/material/styles';
 import MuiGrid from '@mui/material/Grid';
 import List from '@mui/material/List';
@@ -27,7 +18,6 @@ const style = {
 const Grid = styled(MuiGrid)(({ theme }) => ({
     width: '100%',
     // top: '1000',
->>>>>>> 6a9dbe46333cee10d1e86b1a3dbb010d424198ae
     ...theme.typography.body2,
     '& [role="separator"]': {
         margin: theme.spacing(0, 2),

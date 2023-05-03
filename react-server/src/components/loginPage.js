@@ -1,5 +1,4 @@
-import { useState 
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import { fireAuth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Navigate } from "react-router-dom";
@@ -11,6 +10,17 @@ function Login() {
   const [isLoggedIn, setLogin] = useState(
     fireAuth.currentUser == null ? false : true
   );
+
+  useEffect(() => {
+    // Check if the user is already logged in
+    fireAuth.onAuthStateChanged((user) => {
+      if (user) {
+        setLogin(true);
+      } else {
+        setLogin(false);
+      }
+    });
+  });
 
   const handleRegister = (event) => {
     setUser(true);
@@ -30,6 +40,9 @@ function Login() {
       .then((userCreds) => {
         console.log(fireAuth.currentUser.email);
         setLogin(true);
+        fetch("/fireuser/login?email=" + fireAuth.currentUser.email).then((res) =>
+          console.log(res)
+        );
       })
       .catch((error) => {
         const errorMessage = error.message;
@@ -113,17 +126,6 @@ function Login() {
   }
 
   return (
-    // <form onSubmit={handleLogin}>
-    //   <label>
-    //     Email:
-    //     <input type="email" value={email} onChange={handleEmailChange} />
-    //   </label> 
-    //   <label>
-    //     Password:
-    //     <input type="password" value={password} onChange={handlePasswordChange} />
-    //   </label>
-    //   <button type="submit">Login</button>
-    // </form>
     <div className='box'>
       <div className='box-form'>
         <div className='box-login-tab'></div>
@@ -150,6 +152,7 @@ function Login() {
             </label> */}
 
             <input type='submit' id='do_login' value='Login' title='Login' onClick={handleLogin} />
+            {/* <input type='submit' id='do_login' value='Logout' title='Logout' onClick={handleLogout} /> */}
           </div>
         </div>
       </div>
