@@ -57,7 +57,7 @@ const Notify = () => {
                 const currData = await getAllCreds();
                 onSnapshot(users, (querySnapshot) => {
                     querySnapshot.docChanges().forEach((change) => {
-                        if (change.type === "modified" && change.doc.id === fireAuth.currentUser.email) {
+                        if (change.type === "modified" && change.doc.id === user.email) {
                             const updatedValue = change.doc.data().creds;
                             console.log("update: ", updatedValue)
                             for (let i = 0; i < updatedValue.length; i++) {

@@ -1,11 +1,8 @@
-import { useState } from 'react';
-import { json, useParams } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { fireAuth } from "../firebase";
-import { createUser, addCreds, removeCreds, getCreds } from "../utils/utils"
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from 'react';
+import { addCreds} from "../utils/utils"
+// import 'react-toastify/dist/ReactToastify.css';
 import PasswordInput from './password';
+import { fireAuth } from '../firebase';
 
 function SaveCredentials(props) {
   const [username, setUsername] = useState('');
@@ -89,7 +86,7 @@ function SaveCredentials(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    addCreds({
+    addCreds(fireAuth.currentUser.email, {
       url: url,
       username: username,
       password: password,

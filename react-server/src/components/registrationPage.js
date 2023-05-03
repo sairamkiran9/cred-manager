@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { fireAuth } from "../firebase";
 import { createUser } from "../utils/utils";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 import { Navigate } from "react-router-dom";
 
 function Registration() {
@@ -26,12 +26,12 @@ function Registration() {
         const user = userCreds.user;
         createUser(email);
         console.log(user);
-        toast.success('User saved successfully');
+        // toast.success('User saved successfully');
       })
       .catch((error) => {
         const errorMessage = error.message;
         console.log(errorMessage);
-        toast.error('User not saved');
+        // toast.error('User not saved');
       });
     console.log("user registered!")
   };
@@ -100,22 +100,6 @@ function Registration() {
   }
 
   return (
-    // <div>
-    //   <h1>Register</h1>
-    //   {/* <iframe src="./Login/login.html" title="Login Page"></iframe> */}
-    //   <form onSubmit={handleSubmit}>
-    //     <label>
-    //       Email:
-    //       <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-    //     </label>
-    //     <label>
-    //       Password:
-    //       <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-    //     </label>
-    //     <button type="submit">Register</button>
-    //   </form>
-    // </div>
-
     <div className='box'>
       <div className='box-form'>
         <div className='box-login-tab'></div>

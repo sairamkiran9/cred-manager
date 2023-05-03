@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 function PasswordInput(props) {
   const [password, setPassword] = useState('');
@@ -49,7 +49,7 @@ function PasswordInput(props) {
 }
 
 function checkPasswordStrength(password) {
-  if (password.length == 0) {
+  if (password.length === 0) {
     return '';
   }
   else if (password.length < 8) {
