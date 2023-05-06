@@ -51,7 +51,7 @@ function init(curUrl) {
                 },
                 function (response) {
                     console.log("sendGetRequest response: ", response)
-                    if (response.trim().length === 2) {
+                    if (response!=null && response.trim().length === 2) {
                         // popupQuery = "http://localhost:5000/popup?url=" + curUrl
                         console.log("In if for unsaved creds")
                         chrome.runtime.sendMessage({ action: "save_creds_popup", url: curUrl });

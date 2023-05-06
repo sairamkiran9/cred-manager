@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Login from "./components/loginPage";
 import Registration from "./components/registrationPage";
@@ -7,21 +8,14 @@ import Test from "./test";
 import SaveCredentials from "./components/saveCredsPage";
 import ViewCreds from "./components/viewCreds";
 import Url from "./components/testUrl";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import Appp from "./components/Appp";
-import GetUrlCreds from "./components/getCredsByUrl";
-import EncryptDecrypt from "./components/encryptDecrypt";
+import OTPVerification from "./components/otp";
+import Notify from './components/notify';
+import Chart from './components/viewCharts';
 
 function App() {
-  const { url } = useParams();
-
   return (
     <div className="App">
-      <ToastContainer />
-      {/* <Appp /> */}
-      {/* <EncryptDecrypt /> */}
-      {/* {<ActionAreaCard />} */}
+      {<Notify />}
       <BrowserRouter>
         <Routes>
           <Route index element={<Login />} />
@@ -31,9 +25,11 @@ function App() {
           <Route path="home" element={<Home />} />
           <Route path="savecreds" element={<SaveCredentials />} />
           <Route path="viewcreds" element={<ViewCreds />} />
-          <Route path="geturlcreds" element={<GetUrlCreds />} />
+          <Route path="otp" element={<OTPVerification />} />
           <Route path="*" element={<div>404 NOT FOUND</div>} />
           <Route path="/url/:url" element={<Url />} />
+          <Route path="insights" element={<Chart />} />
+          {/* <Route path="/sharecreds" element={<ShareCreds />} /> */}
         </Routes>
       </BrowserRouter>
     </div>

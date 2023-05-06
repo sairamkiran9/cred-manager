@@ -26,4 +26,7 @@ export const fireAuth = getAuth(app);
 export const fireDb = getFirestore(app);
 export const users = collection(fireDb, "users");
 export const logins = collection(fireDb, "logins");
+// export const mfaAuth = PhoneAuthProvider();
+
+// export const authEmail = auth(app);
 
