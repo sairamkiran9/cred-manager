@@ -10,6 +10,7 @@ import ViewCreds from "./components/viewCreds";
 import Url from "./components/testUrl";
 import OTPVerification from "./components/otp";
 import Notify from './components/notify';
+import Chart from './components/viewCharts';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="otp" element={<OTPVerification />} />
           <Route path="*" element={<div>404 NOT FOUND</div>} />
           <Route path="/url/:url" element={<Url />} />
+          <Route path="insights" element={<Chart />} />
           {/* <Route path="/sharecreds" element={<ShareCreds />} /> */}
         </Routes>
       </BrowserRouter>

@@ -54,7 +54,7 @@ function ViewCreds() {
         setHover(null);
     }
 
-    const openPopup = async (url, username, password) => {
+    const openPopupShare = async (url, username, password) => {
         console.log("details", url, username, password, email);
         await addCreds(email, {
             url: url,
@@ -65,12 +65,27 @@ function ViewCreds() {
         });
         console.log("Creds shared successfully");
         alert("creds shared successfully to " + email);
+        setShare(null);
     }
 
-    const handleClick = async (e, url, username, password) => {
+    const openPopup = async (url, username, password) => {
+        console.log("details", url, username, password, email);
+        window.open(
+            `/otp?url=${url}&username=${username}&password=${password}`,
+            "popup",
+            "width=400,height=400"
+        );        
+    }
+
+    const handleClick = async (e, type, url, username, password) => {
         e.preventDefault();
         const decryptedPass = CryptoJS.AES.decrypt(password, "secret key").toString(CryptoJS.enc.Utf8);
-        await openPopup(url, username, decryptedPass);
+        if(type==="share"){
+            await openPopupShare(url, username, decryptedPass);
+        }
+        else {
+            await openPopup(url, username, decryptedPass);
+        }
     }
 
     const handleShare = (e, index) => {
@@ -118,9 +133,9 @@ function ViewCreds() {
                                 <StyledTableCell align="center">{row.url}</StyledTableCell>
                                 <StyledTableCell align="center">{row.username}</StyledTableCell>
                                 <StyledTableCell align="center" id={row.password}>{handleData(index, row.password)}</StyledTableCell>
-                                <StyledTableCell align="center"><button onMouseOver={() => handleFocus(index)} onMouseOut={handleBlur} onDoubleClick={async (e) => await handleClick(e, row.url, row.username, row.password)}> <img style={{ height: "30px", width: "30px", opacity: "30%" }} src={process.env.PUBLIC_URL + "/static/images/eyee.jpg"} alt="Hidden" /> </button>
+                                <StyledTableCell align="center"><button onMouseOver={() => handleFocus(index)} onMouseOut={handleBlur} onDoubleClick={async (e) => await handleClick(e, "popup", row.url, row.username, row.password)}> <img style={{ height: "30px", width: "30px", opacity: "30%" }} src={process.env.PUBLIC_URL + "/static/images/eyee.jpg"} alt="Hidden" /> </button>
                                 </StyledTableCell>
-                                <StyledTableCell align="center" id="share"> {(index != null && index === isShared) ? <form onSubmit={async (e) => await handleClick(e, row.url, row.username, row.password)}>
+                                <StyledTableCell align="center" id="share"> {(index != null && index === isShared) ? <form onSubmit={async (e) => await handleClick(e, "share", row.url, row.username, row.password)}>
                                     {/* Share credentials securely! */}
                                     <label>
                                         Share credentials securely with:

@@ -8,12 +8,25 @@ from temp import generate
 from flask import Flask, render_template, request, redirect, url_for, jsonify
  # Replace with the actual path to myfolder
 
-app = Flask(_name_)
+app = Flask(__name__)
 cred = credentials.Certificate('config.json')
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
 fire_user = ""
+
+def update_logins(creds):
+    docs = db.collection("Logins").get()
+    data = [doc.to_dict() for doc in docs if doc.id == fire_user]
+    for login in data[0]["login"]:
+        if login["url"] == creds["url"]:
+            login["count"] += 1
+            
+            return
+    login = {
+        "url": creds["url"],
+        "count": creds["count"]
+    }
 
 @app.route('/user/<email>')
 def get_user_by_email(email):
@@ -29,6 +42,7 @@ def login():
     email = request.args.get('email')
     global fire_user
     fire_user = email
+    print("fireuser login", fire_user)
     try:
         user = auth.get_user_by_email(fire_user)
         return "User logged in successfully."
@@ -40,7 +54,9 @@ def login():
 def get_collection_data():
     collection_name = "users"
     docs = db.collection(collection_name).get()
+    print("fire_user", fire_user)
     data = [doc.to_dict() for doc in docs if doc.id == fire_user]
+    print(data)
     if(len(data) >= 1):
         return data[0]["creds"]
     return []
@@ -54,6 +70,7 @@ def get_data():
     data = [doc.to_dict() for doc in docs if doc.id == fire_user]
     for cred in data[0]["creds"]:
         if cred["url"] == url:
+            update_logins(cred)
             return cred
     return {}
 

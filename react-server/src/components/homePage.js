@@ -60,7 +60,7 @@ function Home() {
                             />
                             <CardContent >
                                 <Typography gutterBottom variant="h5" component="div">
-                                    <a href="http://localhost:3000/home" id="home">Insights</a>
+                                    <a href="http://localhost:3000/insights" id="home">Insights</a>
                                 </Typography>
                             </CardContent>
                         </CardActionArea>

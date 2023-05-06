@@ -22,7 +22,6 @@ export const getCreds = async (url) => {
     const data = (await getDoc(doc(fireDb, "users", email))).data();
     data.creds = data.creds.filter((e) => e.url === url);
     return JSON.stringify(data.creds[0]);
-    
 };
 
 export const getAllCreds = async () => {
